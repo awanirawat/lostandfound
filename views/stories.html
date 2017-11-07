@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <!--Load the AJAX API-->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/design.css">
+    <style>
+    body {
+      background: #333;
+      color: white;
+      font-size: 25px;
+    }
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+          ['lost', 90],
+          ['found', 10],
+
+        ]);
+
+        // Set chart options
+        var options = {'title':'Lost and Found Graph',
+                       'width':500,
+                       'height':600};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+
+  <body>
+    <!--Div that will hold the pie chart-->
+    <body >
+
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+
+          <div class="container">
+            <div class="logo">
+              <img src="images/logo.jpg" height="100" width="100">
+            </div>
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
+
+                  <ul class="nav navbar-nav" id="u">
+                    <li class="active"><a href="index.html">Home </a></li>
+                    <li class="active"><a href="aboutUs.html">About</a></li>
+                    <li class="active"><a href="stories.html">Stories</a></li>
+                    <li class="active"><a href="contact.html">Contact</a></li>
+                    <li class="active"><a href="help.html">Help</a></li>
+                  </ul>
+                </ul>
+                  </div>
+                </div>
+              </nav>
+<br>
+<br>
+    <div id="chart_div" ALIGN=CENTER></div>
+  </body>
+</html>

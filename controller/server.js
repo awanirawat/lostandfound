@@ -1,159 +1,252 @@
-var express = require('express');
-const MongoClient = require('mongodb').MongoClient;
+<!--FETCHING PACKAGES///////////////////////////////////////////////////////////////////////////////
+
+var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var multer = require('multer');
-
-var app = express();
+var urlencodedParser = bodyParser.urlencoded({extended:false});
 app.use(express.static(__dirname+'/public'));
-// app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
 
 
-var Storage = multer.diskStorage({
-    destination: function(req, file, callback) {
-        callback(null, "./Images");
-    },
-    filename: function(req, file, callback) {
-        callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
-    }
+<!--CONNECTING WITH MONGOOSE/////////////////////////////////////////////////////////////////////////
+
+mongoose.connection.once('open',function(){
+  console.log("Connected to Mongo DB");
+}).on('error',function(){
+  console.log("Error in DB connection");
 });
 
-var upload = multer({
-    storage: Storage
-}).array("imgUploader", 3); //Field name and max count
+
+<!--SCHEMAS FOR DATABASE///////////////////////////////////////////////////////////////////////////////
+
+const Schema = mongoose.Schema; <!--OBJECT-->
+
+<!--REGISTRATION
+
+const RegisterSchema = new Schema({
+  id:String,
+  password:String,
+  firstname:String,
+  lastname:String
+});
+
+<!--LOST
+
+const LostDataSchema = new Schema({
+  item:String,
+  owner:String,
+  contact:String,
+  specification:String,
+  location:String
+});
+
+<!--FOUND
+
+const FoundDataSchema = new Schema({
+  item:String,
+  finder:String,
+  contact:String,
+  specification:String,
+  location:String,
+  owner:String
+});
 
 
-app.get('/',(req, res)=>{
-	res.redirect('/index.html');
-})
+<!--MODELS FOR DATABASES//////////////////////////////////////////////////////////////////////////////
 
-app.get('/signup',(req, res)=>{
-	res.redirect('/signup.html');
-})
+const Register = mongoose.model('registercollection',RegisterSchema);
+const LostData = mongoose.model('lostdatacollection',LostDataSchema);
+const FoundData = mongoose.model('founddatacollection',FoundDataSchema);
 
-app.get('/login',(req, res)=>{
-	res.redirect('/login.html');
-})
 
-app.get('/DisplaylostEntries',(req, res)=>{
-	res.redirect('/displayLostItem.html');
-})
+<!-- REDIRECTIONS ////////////////////////////////////////////////////////////////////////////////////
 
-app.get('/DisplayFoundEntries',(req, res)=>{
-	res.redirect('/displayFoundItem.html');
-})
+module.exports = function(app){
 
-app.post('/displayLost',(req, res)=>{
-  MongoClient.connect('mongodb://localhost:27017/Test', (err, db) => {
-    if (err) {
-      return console.log('Unable to connect to MongoDB server');
-    }
-    console.log('Connected to MongoDB server...');
+app.get('/',function(req, res){
+	res.render('index');
+});
 
-    db.collection('lostData').find({}).toArray().then((docs) => {
-      //console.log(JSON.stringify(docs, undefined, 2));
-      res.send(docs);
-      }, (err) => {
-	       res.status(400).send(err);
-         res.send("error");
-	    });
+app.get('/signup',function(req, res){
+	res.render('signup');
+});
 
-	  db.close();
-	})
-})
+app.get('/login',function(req, res){
+	res.render('login');
+});
 
-app.post('/displayFound',(req, res)=>{
-  MongoClient.connect('mongodb://localhost:27017/Test', (err, db) => {
-    if (err) {
-      return console.log('Unable to connect to MongoDB server');
-    }
-    console.log('Connected to MongoDB server...');
+app.get('/dashboard',function(req, res){
+	res.render('Personal');
+});
 
-    db.collection('FoundData').find({}).toArray().then((docs) => {
-      //console.log(JSON.stringify(docs, undefined, 2));
-      res.send(docs);
-      }, (err) => {
-	       res.status(400).send(err);
-         res.send("error");
-	    });
+app.get('/ownData',function(req, res){
+	res.render('Own_entry');
+});
 
-	  db.close();
-	})
-})
+app.get('/DisplayLostEntries',function(req, res){
+	res.render('displayLostItem');
+});
 
-app.post('/signing', (req, res) => {
-  var todo = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
+app.get('/myFoundEntries',function(req, res){
+	res.render('Own_entry');
+});
+
+app.get('/myLostEntries',function(req, res){
+	res.render('#');
+});
+
+app.get('/DisplayFoundEntries',function(req, res){
+	res.render('displayFoundItem');
+});
+
+
+
+<!--HANDLING DATABASE CALLS///////////////////////////////////////////////////////////////////////////////
+
+<!--USER REGISTRATION
+
+app.post('/signing', function(req, res){
+console.log(req.body);
+
+  const user = new Register {
+    firstname: req.body.firstName,
+    lastname: req.body.lastName,
+    id: req.body.email,
     password: req.body.pwd
   };
-  //console.log(todo.firstName)
-  console.log(req)
-  // if(req.body !== ""){}
-  MongoClient.connect('mongodb://localhost:27017/Test', (err, db) => {
-	  if (err) {
-	    return console.log('Unable to connect to MongoDB server');
-	  }
-	  console.log('Connected to MongoDB server...');
-
-	  db.collection("testData").insertOne(todo,(err, result)=>{
-	  	if (err) {
-	      res.status(400).send(err);
-        res.send("error");
-	    }else{
-    		//res.send(result.ops);
-        res.send("hello");
-	    }
-
-	  })
-
-	  db.close();
-	})
+user.save().then(function(){
+  console.log("Inserted new user in Register Database");
+})
 });
 
-app.post('/loging', (req, res) => {
-  var todo = {
-    em: req.body.email,
-    pass: req.body.pwd
+
+<!--USER LOGIN
+
+
+app.post('/loging',urlencodedParser,function(req,res){
+  console.log("check_for_user");
+  console.log(req.body.email);
+
+  RegisterUser.find({id:req.body.email,password:req.body.pwd}).then(function(result){
+    res.json(result);
+    console.log("Check for username and password during login");
+    console.log(result);
+  });
+});
+
+
+<!--WHAT I HAVE FOUND
+
+
+app.post('/myFound',urlencodedParser,function(req,res){
+  console.log("Database Connection for What I have Found");
+  console.log(req.body.name);
+
+  FoundData.find({finder:req.body.name}).then(function(result){
+    res.json(result);
+    console.log("Returning items which I Found");
+    console.log(result);
+  });
+});
+
+
+<!--WHAT I HAVE LOST
+
+
+app.post('/myLost',urlencodedParser,function(req,res){
+  console.log("Database Connection for What I have Lost");
+  console.log(req.body.name);
+
+  LostData.find({owner:req.body.name}).then(function(result){
+    res.json(result);
+    console.log("Returning items which I Lost");
+    console.log(result);
+  });
+});
+
+
+<!--WHAT OTHERS HAVE LOST
+
+
+app.post('/displayLost',urlencodedParser,function(req,res){
+  console.log("Database Connection for What Others have Lost");
+
+  LostData.find({}).then(function(result){
+    res.json(result);
+    console.log("Returning items which Others Lost");
+    console.log(result);
+  });
+});
+
+
+<!--WHAT OTHERS HAVE FOUND
+
+
+app.post('/displayFound',urlencodedParser,function(req,res){
+  console.log("Database Connection for What Others have Found");
+
+  FoundData.find({}).then(function(result){
+    res.json(result);
+    console.log("Returning items which Others Found");
+    console.log(result);
+  });
+});
+
+
+<!--CATEGORIAL DISPLAY
+
+
+app.post('/displayFoundCategory',urlencodedParser,function(req,res){
+  console.log("Database Connection for Categorial Display");
+
+  FoundData.find({item:req.body.item}).then(function(result){
+    res.json(result);
+    console.log("Returning items for Categorial Display");
+    console.log(result);
+  });
+});
+
+
+<!--ENTRY IN LOST TABLE
+
+
+app.post('/lostentry', function(req, res){
+console.log(req.body);
+  const data1 = new LostData {
+    item: req.body.itemName,
+    owner : req.body.owner,
+    contact: req.body.contact,
+    specification: req.body.specification,
+    location: req.body.location
   };
-  //console.log(todo.firstName)
-  console.log(req)
-  // if(req.body !== ""){}
-  MongoClient.connect('mongodb://localhost:27017/Test', (err, db) => {
-	  if (err) {
-	    return console.log('Unable to connect to MongoDB server');
-	  }
-	  console.log('Connected to MongoDB server...');
-
-    db.collection('testData').find({email: todo.em}).toArray().then((docs) => {
-
-      console.log(JSON.stringify(docs, undefined, 2));
-      console.log("password: "+docs[0].password);
-      if(docs[0].password===todo.pass)
-      {
-       console.log(JSON.stringify(docs, undefined, 2));
-      }
-      else {
-        console.log('Unable to fetch todos');
-        //res.status(400).send(err);
-        //res.send("error");
-      }
-      }, (err) => {
-         //console.log('Unable to fetch todos', err);
-         //res.redirect('/login.html');
-	       res.status(400).send(err);
-         res.send("error");
-	    });
-
-	  db.close();
-	})
+data1.save().then(function(){
+  console.log("Inserted new item in Lost Database");
+})
 });
+
+
+<!--ENTRY IN FOUND TABLE
+
+
+app.post('/foundentry', function(req, res){
+console.log(req.body);
+  const data2 = new FoundData {
+    item: req.body.itemName,
+    finder : req.body.finder,
+    contact: req.body.contact,
+    specification: req.body.specification,
+    location: req.body.location
+  };
+data2.save().then(function(){
+  console.log("Inserted new item in Found Database");
+})
+});
+
+
+<!--UPLOAD IMAGE
 
 
 app.post("/uploadImage", function(req, res) {
+    console.log(req)
     upload(req, res, function(err) {
         if (err) {
             return res.end("Something went wrong!");
@@ -162,39 +255,5 @@ app.post("/uploadImage", function(req, res) {
     });
 });
 
-app.get('/lostentry',(req, res)=>{
-  var data = {
-    ItemName: req.body.ItemName,
-    specification: req.body.specification,
-    image:req.body.image
-  };
-  console.log(req)
 
-
-  MongoClient.connect('mongodb://localhost:27017/Test', (err, db) => {
-    if (err) {
-      return console.log('Unable to connect to MongoDB server');
-    }
-    console.log('Connected to MongoDB server...');
-
-
-    db.collection('lostData').insertOne.insertOne(data,(err, result)=>{
-	  	if (err) {
-	      res.status(400).send(err);
-        res.send("error");
-	    }else{
-    		//res.send(result.ops);
-        res.send("hello");
-	    }
-
-	  })
-
-	  db.close();
-	})
-
-
-})
-
-app.listen(3000, () => {
-  console.log('Started on port 3000');
-});
+};
