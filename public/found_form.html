@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Found Page</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/design.css">
+    <style>
+    @import url(https://fonts.googleapis.com/css?family=Exo:100,200,400);
+    @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:700,400,300);
+    body{
+    	margin: 0;
+    	padding: 0;
+    	background: #fff;
+
+    	color: #191919;
+    	font-family: Arial;
+    	font-size: 12px;
+    }
+    .body{
+    	position: absolute;
+    	top: 20px;
+    	left: 20px;
+    	right: 20px;
+    	bottom: 20px;
+    	width: auto;
+    	height: auto;
+    	background-image: url("images/dec.jpg");
+
+    	background-size: 1700px;
+
+
+    	-webkit-filter: blur(0px);
+    	z-index: 0;
+    }
+
+    .grad{
+    	position: absolute;
+    	top: -20px;
+    	left: -20px;
+    	right: -40px;
+    	bottom: -10px;
+    	width: auto;
+    	height: auto;
+    	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.65))); /* Chrome,Safari4+ */
+    	z-index: 1;
+    	opacity: 0.7;
+    }
+
+    .header{
+    	position: absolute;
+    	top: calc(50% - 35px);
+    	left: calc(70% - 255px);
+    	z-index: 2;
+    }
+
+    .header div{
+    	float: left;
+    	color: #191919;
+    	font-family: 'Exo', sans-serif;
+    	font-size: 35px;
+    	font-weight: 200;
+    }
+
+    .header div span{
+    	color: #191919 !important;
+    }
+
+    .found{
+    	position: absolute;
+    	top: calc(60% - 75px);
+    	left: calc(57% - 50px);
+    	height: 150px;
+    	width: 350px;
+    	padding: 10px;
+    	z-index: 2;
+    }
+
+    .found input[type=text]{
+    	width: 250px;
+    	height: 30px;
+    	background: transparent;
+    	border: 1px solid rgba(0,0,0,0.6);
+    	border-radius: 2px;
+    	color: #191919;
+    	font-family: 'Exo', sans-serif;
+    	font-size: 16px;
+    	font-weight: 400;
+    	padding: 4px;
+    }
+
+      #spc{
+    	width: 250px;
+    	height: 30px;
+    	background: transparent;
+    	border: 1px solid rgba(0,0,0,0.6);
+    	border-radius: 2px;
+    	color: #191919;
+    	font-family: 'Exo', sans-serif;
+    	font-size: 16px;
+    	font-weight: 400;
+    	padding: 4px;
+    	margin-top: 10px;
+    }
+
+    #send{
+    	width: 260px;
+    	height: 35px;
+    	background: #fff;
+    	border: 1px solid #191919;
+    	cursor: pointer;
+    	border-radius: 2px;
+    	color: #191919;
+    	font-family: 'Exo', sans-serif;
+    	font-size: 16px;
+    	font-weight: 400;
+    	padding: 6px;
+    	margin-top: 10px;
+    }
+
+    #send:hover{
+    	opacity: 0.8;
+    }
+
+    #send:active{
+    	opacity: 0.6;
+    }
+
+    .lost input[type=text]:focus{
+    	outline: none;
+    	border: 1px solid rgba(0,0,0,0.9);
+    }
+
+    #spc:focus{
+    	outline: none;
+    	border: 1px solid rgba(0,0,0,0.9);
+    }
+
+    #send:focus{
+    	outline: none;
+    }
+
+    ::-webkit-input-placeholder{
+       color: rgba(0,0,0,0.6);
+    }
+
+    ::-webkit-input-placeholder{
+       color: rgba(0,0,0,0.6);
+    }
+
+    ::-moz-input-placeholder{
+       color: rgba(0,0,0,0.6);
+    }
+        </style>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+    </head>
+
+    <body>
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+
+    		<div class="container">
+    			<div class="logo">
+    				<img src="images/logo.jpg" height="100" width="100">
+    			</div>
+    			<!-- Collect the nav links, forms, and other content for toggling -->
+    			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+    				<ul class="nav navbar-nav" id="u">
+
+    					<li class="active"><a href="#">Home </a></li>
+    					<li class="active"><a href="#">About</a></li>
+    					<li class="active"><a href="#">Stories</a></li>
+    					<li class="active"><a href="#">Contact</a></li>
+    					<li class="active"><a href="#">Help</a></li>
+    				</ul>
+    			</div>
+    		</div>
+    	</nav>
+
+      <div class="body"></div>
+    		<div class="grad"></div>
+    		<div class="header">
+    			<div><span><strong>FOUND..</strong></span></div>
+    		</div>
+    		<br>
+    		<div class="found">
+          <input type="text" placeholder="Item" name="Item" id="itemName"><br>
+          <br>
+          <p><textarea  placeholder="Specification" name="Specs" id="spc"></textarea></p>
+          <br>
+          <input type="text" placeholder="Location" name="Location" id="loc"><br>
+          <br>
+          <input type="text" placeholder="Contact" name="Contact" id="con"><br>
+          <br>
+          <!---Upload Image
+          <input type="file" id="img" name="imgUploader" multiple />
+          <input type="file" name="imageupload" id="img" value="imageupload"><br>--->
+          <button id="send" value="Submit">Submit</button>
+    		</div>
+      <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+      <script>
+    		$('#send').click(()=>{
+        /*  var filename = $('#img').val();
+         $( "#imgname" ).html(filename);
+         $(function(){
+
+          $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/uploadImage",
+            data: filename,
+            enctype:"multipart/form-data"
+            success:  ( res )=> {
+            //$( "#result" ).text( JSON.stringify(res, undefined, 3) )
+          }
+        });*/
+        console.log(localStorage.getItem("username"))
+      	var data = { itemName : $('#itemName').val(),finder : localStorage.getItem("username"), specification: $('#spc').val(),contact : $('#con').val(), location : $('#loc').val()}//image : filename}
+        console.log(data)
+              $.ajax({
+      					type: "POST",
+      					url: "http://localhost:3000/foundentry",
+      					data: data,
+      					success:  ( res )=> {
+                  window.location.pathname="dashboard";
+      					//$( "#result" ).text( JSON.stringify(res, undefined, 3) )
+      					}
+      				});
+      			});
+    	</script>
+    </body>
+    </html>

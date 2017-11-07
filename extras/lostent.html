@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Lost Item </title>
+	<meta charset="utf-8">
+	<title>Lost Item</title>
+	<style type="text/css">
+	body {
+	background-color: #f4f4f4;
+	color: #5a5656;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	font-size: 20px;
+
+	}
+	a { text-decoration: none; }
+	h1 { font-size: 1em; }
+	h1, p {
+	margin-bottom: 10px;
+	}
+	strong {
+	font-weight: bold;
+	}
+	.uppercase { text-transform: uppercase; }
+
+	/* ---------- SIGN UP ----------*/
+	#lostentry {
+	margin: 100px auto;
+	width: 300px;
+	}
+	#img,#spc{
+	background-color: #e5e5e5;
+	border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	color: #5a5656;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	height: 50px;
+	outline: none;
+	padding: 0px 10px;
+	width: 280px;
+
+	}
+	#send {
+	background-color: #008dde;
+	border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	color: #f4f4f4;
+	cursor: pointer;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	height: 50px;
+	text-transform: uppercase;
+	width: 300px;
+
+	}
+	</style>
+</head>
+<body>
+
+	<div id="lostitem">
+    <h1><strong>What have you Lost?? </strong> Please enter the details.</h1>
+    <h2 id="imgname"></h2>
+  	<form name="LostItemEntry">
+  	<fieldset>
+    <p>Item<input type="text" id="itemName" /></p>
+  	<p>Specifications<textarea value="color,type.." id="spc"></textarea></p>
+  	<p>Upload Image<input type="file" id="img" name="imgUploader" multiple />
+  	<p><button id="send">Submit</button></p>
+  	</fieldset>
+    </form>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<script>
+		$('#send').click(()=>{
+      var filename = $('#img').val();
+     $( "#imgname" ).html(filename);
+     $(function(){
+
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:3000/uploadImage",
+        data: filename,
+        enctype:"multipart/form-data"
+        success:  ( res )=> {
+        //$( "#result" ).text( JSON.stringify(res, undefined, 3) )
+      }
+    });
+		var data = { ItemName : $('#itemName').val(), specification: $('#spc').val(), image : filename}
+				$.ajax({
+					type: "POST",
+					url: "http://localhost:3000/lostentry",
+					data: data,
+					success:  ( res )=> {
+					//$( "#result" ).text( JSON.stringify(res, undefined, 3) )
+					}
+				});
+			});
+	});
+	</script>
+
+</body>
+</html>

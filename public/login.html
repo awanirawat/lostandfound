@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Login page</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/design.css">
+	<style type="text/css">
+	body {
+	background-color: #333;
+	color: #fff;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	font-size: 20px;
+
+	}
+	a { text-decoration: none; }
+	h1 { font-size: 1em; }
+	h1, p {
+	margin-bottom: 10px;
+	}
+	strong {
+	font-weight: bold;
+	}
+	.uppercase { text-transform: uppercase; }
+
+	/* ---------- LOGIN ---------- */
+	#login {
+	margin: 300px auto;
+	width: 300px;
+	}
+	form fieldset input[type="text"], input[type="password"] {
+	background-color: #e5e5e5;
+	border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	color: #5a5656;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	height: 50px;
+	outline: none;
+	padding: 0px 10px;
+	width: 280px;
+	-webkit-appearance:none;
+	}
+	form fieldset input[type="submit"] {
+	background-color: #008dde;
+	border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	color: #f4f4f4;
+	cursor: pointer;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	height: 50px;
+	text-transform: uppercase;
+	width: 300px;
+	-webkit-appearance:none;
+	}
+	form fieldset a {
+	color: #F08080;
+	font-size: 15px;
+	}
+	form fieldset a:hover { text-decoration: underline; }
+
+
+	</style>
+</head>
+<body>
+
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+
+		<div class="container">
+			<div class="logo">
+				<img src="images/logo.jpg" height="100" width="100">
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+				<ul class="nav navbar-nav" id="u">
+
+					<li class="active"><a href="index.html">Home </a></li>
+					<li class="active"><a href="aboutUs.html">About</a></li>
+					<li class="active"><a href="stories.html">Stories</a></li>
+					<li class="active"><a href="contact.html">Contact</a></li>
+					<li class="active"><a href="help.html">Help</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+
+
+
+
+
+	<div id="login">
+  <h1><strong>Welcome.</strong> Please login to start.</h1>
+  <form name="LoginForm">
+  <fieldset>
+  <p><input type="text" id="email" required value="Email" onBlur="if(this.value=='')this.value='Email'" onFocus="if(this.value=='Email')this.value='' "></p>
+  <p><input type="password" id="pwd" required value="Password" onBlur="if(this.value=='')this.value='Password'" onFocus="if(this.value=='Password')this.value='' "></p>
+  <p><a href="#">Forgot Password?</a></p>
+  <p><input type="submit" id="send" value="Login"></p>
+  </fieldset>
+  </form>
+  </div>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<script>
+		$('#send').click(()=>{
+			$(function(){
+				var data = { email : $('#email').val(), pwd : $('#pwd').val()}
+				//console.log("Sending: "+data.firstName);
+				$.ajax({
+					type: "POST",
+					url: "http://localhost:3000/loging",
+					data: data,
+					success: function(res){
+						console.log("callback");
+						if(res.length==1)
+						{	//console.log(res);
+							//alert("hello");
+							localStorage.setItem("username",res[0].firstName+" "+res[0].lastName);
+							console.log(localStorage.getItem("username"));
+							window.location.pathname="dashboard";
+						}
+						else
+						{
+							alert("Invalid credentials!!");
+						}
+						}
+				});
+				return false;
+		});
+	});
+	</script>
+
+</body>
+</html>
